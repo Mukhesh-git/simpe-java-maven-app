@@ -6,6 +6,16 @@ pipeline {
         sh 'mvn clean install package'
       }
     }
+    stage('SonarQube') {
+  environment {
+    scannerHome = tool 'SonarQubeScanner'
+  }
+  steps {
+    withSonarQubeEnv('SonarQubeScanner') {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
+}
     stage('building docker image from docker file by tagging') {
       steps {
         sh 'docker build -t phanirudra9/phani9-devops:$BUILD_NUMBER .'
