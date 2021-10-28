@@ -6,9 +6,6 @@ pipeline {
         sh 'mvn clean install package'
       }
     }
-     stage('SCM') {
-  git 'https://github.com/Mukhesh-git/simpe-java-maven-app.git'
-  }
   stage('SonarQube analysis') {
     withSonarQubeEnv(credentialsId: '3cd28ea5286481b1a9c35a6951e7c395303cb982', installationName: 'My SonarQube Server') 
     {
