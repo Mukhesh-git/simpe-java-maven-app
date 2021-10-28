@@ -6,16 +6,16 @@ pipeline {
         sh 'mvn clean install package'
       }
     }
-    stage('SonarQube') {
-  environment {
-    scannerHome = tool 'SonarQubeScanner'
+     stage('SCM') {
+  git 'https://github.com/Mukhesh-git/simpe-java-maven-app.git'
   }
-  steps {
-    withSonarQubeEnv('SonarQubeScanner') {
-      sh "${scannerHome}/bin/sonar-scanner"
+  stage('SonarQube analysis') {
+    withSonarQubeEnv(credentialsId: '3cd28ea5286481b1a9c35a6951e7c395303cb982', installationName: 'My SonarQube Server') 
+    {
+      // You can override the credential to be used
+      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0:sonar'
     }
   }
-}
     stage('building docker image from docker file by tagging') {
       steps {
         sh 'docker build -t phanirudra9/phani9-devops:$BUILD_NUMBER .'
